@@ -9,7 +9,9 @@ if (typeof window !== 'undefined') {
 }
 
 export function TextReveal({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
-  const container = useRef<HTMLDivElement>(null);
+  // NOTE: renders a <span> (not <div>) so it stays valid inside <p> and <h1>.
+  // A <div> here caused hydration mismatch that broke all client interactivity.
+  const container = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
     if (!container.current) return;
@@ -34,7 +36,7 @@ export function TextReveal({ children, delay = 0 }: { children: React.ReactNode,
   }, { scope: container });
 
   return (
-    <div ref={container} className="overflow-hidden inline-flex flex-wrap gap-x-3">
+    <span ref={container} className="overflow-hidden inline-flex flex-wrap gap-x-3">
       {typeof children === 'string' 
         ? children.split(' ').map((word, i) => (
             <span key={i} className="inline-block translate-y-full opacity-0 origin-bottom-left">
@@ -42,6 +44,6 @@ export function TextReveal({ children, delay = 0 }: { children: React.ReactNode,
             </span>
           ))
         : <span className="inline-block translate-y-full opacity-0 origin-bottom-left">{children}</span>}
-    </div>
+    </span>
   );
 }

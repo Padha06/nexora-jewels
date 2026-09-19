@@ -87,9 +87,9 @@ export default async function Home() {
               <TextReveal delay={0.1}>The Art of Adornment</TextReveal>
             </p>
             <h1 className="font-serif text-[60px] leading-[0.9] sm:text-[80px] lg:text-[100px] text-charcoal">
-              <div className="overflow-hidden pb-2"><TextReveal delay={0.3}>Heirlooms,</TextReveal></div>
-              <div className="overflow-hidden pb-2"><TextReveal delay={0.5}><span className="italic text-deepgold">reimagined</span></TextReveal></div>
-              <div className="overflow-hidden pb-2"><TextReveal delay={0.7}>in gold.</TextReveal></div>
+              <span className="block overflow-hidden pb-2"><TextReveal delay={0.3}>Heirlooms,</TextReveal></span>
+              <span className="block overflow-hidden pb-2"><TextReveal delay={0.5}><span className="italic text-deepgold">reimagined</span></TextReveal></span>
+              <span className="block overflow-hidden pb-2"><TextReveal delay={0.7}>in gold.</TextReveal></span>
             </h1>
             <div className="mt-10 max-w-md text-[15px] font-light leading-relaxed text-charcoal/70">
               <TextReveal delay={0.9}>
@@ -194,9 +194,6 @@ export default async function Home() {
             </span>
             <p className="mt-3 text-[14px] font-light text-ivory/60">
               Rings · Necklaces · Earrings · Bangles. Bhagwan Nagar, Nagpur.
-            </p>
-            <p className="mt-3 text-[11px] font-light text-ivory/40">
-              3D necklace model: “Necklace01” by lil_lunamoth, licensed CC-BY-4.0.
             </p>
           </div>
           <div className="text-[14px] text-ivory/70">

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import MediaPipeAR from './MediaPipeAR';
-import AvatarTryOn from './AvatarTryOn';
 import Hero3D from './Hero3D';
 
 export default function ModelViewer({
@@ -25,7 +24,6 @@ export default function ModelViewer({
   }, []);
 
   const [showAI, setShowAI] = useState(false);
-  const [showAvatar, setShowAvatar] = useState(false);
 
   const handleLiveARClick = async () => {
     try {
@@ -49,11 +47,6 @@ export default function ModelViewer({
 
   return (
     <div className="flex flex-col w-full">
-      {/* 3D Avatar Try-On */}
-      {showAvatar && (
-        <AvatarTryOn onClose={() => setShowAvatar(false)} />
-      )}
-
       {/* Universal Web AR Overlay using MediaPipe */}
       {showAI && (
         <MediaPipeAR 
@@ -68,7 +61,7 @@ export default function ModelViewer({
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
         </div>
         
-        {src === 'combined-bust' ? (
+        {src === 'showcase' ? (
           <div className="absolute inset-0 z-10">
             <Hero3D />
           </div>
@@ -100,12 +93,6 @@ export default function ModelViewer({
       </div>
 
       <div className="mt-6 flex flex-col gap-3 lg:hidden">
-        <button 
-          onClick={() => setShowAvatar(true)}
-          className="w-full bg-charcoal text-ivory py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-deepgold transition-colors shadow-md flex items-center justify-center gap-3"
-        >
-          👤 Virtual 3D Try-On
-        </button>
         <button 
           onClick={handleLiveARClick}
           className="w-full bg-white text-charcoal py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-zinc-50 border border-charcoal/20 transition-colors shadow-sm flex items-center justify-center gap-3"

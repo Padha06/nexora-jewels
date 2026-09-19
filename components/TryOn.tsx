@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import MediaPipeAR from './MediaPipeAR';
-import AvatarTryOn from './AvatarTryOn';
 
 export default function TryOn({ product, all }: { product: Product | null; all: Product[] }) {
   const [slug, setSlug] = useState<string | null>(product?.slug ?? null);
@@ -12,7 +11,6 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
 
   const [currentUrl, setCurrentUrl] = useState('');
   const [showAR, setShowAR] = useState(false);
-  const [showAvatar, setShowAvatar] = useState(false);
 
   // Set the current URL dynamically so the QR code works correctly
   // whether on localhost, a local IP, or in production.
@@ -40,14 +38,11 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
     );
   }
 
-  const isNecklace = active.category === 'Necklaces';
-
   return (
     <div>
       {showAR && (
         <MediaPipeAR category={active.category} imageUrl={active.images[0]} onClose={() => setShowAR(false)} />
       )}
-      {showAvatar && <AvatarTryOn onClose={() => setShowAvatar(false)} />}
 
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <button onClick={() => setSlug(null)} className="border border-sand bg-white px-4 py-2 text-[13px]">← All pieces</button>
@@ -67,18 +62,9 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
             >
               📸 Live Camera AR — try this exact piece
             </button>
-            {isNecklace ? (
-              <button
-                onClick={() => setShowAvatar(true)}
-                className="w-full bg-white text-charcoal py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-zinc-50 border border-charcoal/20 transition-colors shadow-sm flex items-center justify-center gap-3"
-              >
-                👤 Virtual 3D Try-On
-              </button>
-            ) : (
-              <p className="text-center text-[12px] text-charcoal/55">
-                A 3D model of this exact piece is being scanned — camera try-on above works today.
-              </p>
-            )}
+            <p className="text-center text-[12px] text-charcoal/55">
+              A 3D model of this exact piece is being scanned — camera try-on above works today.
+            </p>
           </div>
         </div>
 

@@ -6,46 +6,5 @@
   - Local:        http://localhost:3001
 
  ✓ Starting...
- ✓ Ready in 2.5s
- ○ Compiling /try-on ...
- ✓ Compiled /try-on in 2.9s (514 modules)
- GET /try-on?product=nexora-solitaire-ring 200 in 3013ms
- ○ Compiling / ...
- ✓ Compiled / in 8.8s (1181 modules)
- GET / 200 in 9846ms
- ○ Compiling /try-on ...
- ✓ Compiled /try-on in 717ms (599 modules)
- GET /try-on?product=temple-pendant-necklace 200 in 1145ms
- ✓ Compiled in 783ms (589 modules)
- ⨯ ./node_modules/@google/model-viewer/lib/features/scene-graph.js:24:1
-Module not found: Can't resolve 'three/examples/jsm/utils/WebGLTextureUtils.js'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./node_modules/@google/model-viewer/lib/model-viewer.js
-./components/ModelViewer.tsx
- ⨯ ./node_modules/@google/model-viewer/lib/features/scene-graph.js:24:1
-Module not found: Can't resolve 'three/examples/jsm/utils/WebGLTextureUtils.js'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./node_modules/@google/model-viewer/lib/model-viewer.js
-./components/ModelViewer.tsx
- ⨯ ./node_modules/@google/model-viewer/lib/features/scene-graph.js:24:1
-Module not found: Can't resolve 'three/examples/jsm/utils/WebGLTextureUtils.js'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./node_modules/@google/model-viewer/lib/model-viewer.js
-./components/ModelViewer.tsx
- ⨯ ./node_modules/@google/model-viewer/lib/features/scene-graph.js:24:1
-Module not found: Can't resolve 'three/examples/jsm/utils/WebGLTextureUtils.js'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./node_modules/@google/model-viewer/lib/model-viewer.js
-./components/ModelViewer.tsx
+ ✓ Ready in 4.3s
+[?25h
