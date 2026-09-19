@@ -43,6 +43,13 @@ export default function DemoGallery() {
               <div className="text-center">
                 <p className="font-serif text-xl">{model.name}</p>
                 <p className="text-xs uppercase tracking-[0.2em] text-deepgold mt-1">View in 360°</p>
+                {model.id === 'necklace' && (
+                  <p className="mt-2 text-[11px] text-charcoal/45">
+                    3D model: “Necklace01” by{' '}
+                    <a href="https://sketchfab.com/lil_lunamoth" target="_blank" rel="noreferrer" className="underline">lil_lunamoth</a>{' '}
+                    (CC-BY-4.0)
+                  </p>
+                )}
               </div>
             </div>
           ))}

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/products';
 
-const BASE = 'https://nexora-jeweller.example.com';
+const BASE = 'https://nexora-jewels.vercel.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -6,8 +6,8 @@ import AvatarTryOn from './AvatarTryOn';
 import Hero3D from './Hero3D';
 
 export default function ModelViewer({
-  src = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
-  iosSrc = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.usdz',
+  src = '',
+  iosSrc = '',
   alt = '22K Gold Ring',
   fallbackImage = 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800',
   category = 'Rings'
@@ -95,7 +95,7 @@ export default function ModelViewer({
         )}
         
         <p className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] uppercase tracking-widest font-bold rounded-sm shadow-sm border border-zinc-200 text-zinc-600">
-          Interact to Rotate
+          {src ? 'Interact to Rotate' : 'Photo preview · 3D soon'}
         </p>
       </div>
 

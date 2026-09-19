@@ -2,13 +2,16 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'NEXORA Jeweller — BIS Hallmarked Fine Jewellery',
+  metadataBase: new URL('https://nexora-jewels.vercel.app'),
+  title: 'NEXORA Jeweller — BIS Hallmarked Fine Jewellery | Nagpur',
   description:
-    'Premium Indian fine jewellery: BIS-hallmarked 22K gold rings, necklaces, earrings, bangles. WhatsApp concierge ordering.',
+    'BIS-hallmarked 22K gold rings, necklaces, earrings, bangles in Bhagwan Nagar, Nagpur. Live gold rates, transparent pricing, 3D + AR try-on, WhatsApp ordering.',
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'NEXORA Jeweller — Heirlooms, Reimagined',
-    description: 'Drag the ring. Feel the gold. BIS-hallmarked craftsmanship.',
+    description: 'See the necklace in 3D, try it on live, order on WhatsApp. Bhagwan Nagar, Nagpur.',
     type: 'website',
+    url: '/',
     images: [
       'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1200&q=80'
     ]

@@ -58,7 +58,7 @@ export default async function Home() {
       <header className="fixed top-0 z-[60] w-full bg-cream/90 backdrop-blur-md border-b border-sand/50">
         <div className="mx-auto flex h-[80px] max-w-7xl items-center justify-between px-6 lg:px-10">
           <a href="#" className="flex items-center gap-3">
-            <Image src="/logo.jpg" alt="Nexora Jewellers" width={160} height={40} className="h-[40px] w-auto object-contain mix-blend-darken" />
+            <Image src="/logo.png" alt="Nexora Jewellers — Bhagwan Nagar, Nagpur" width={200} height={48} className="h-[44px] w-auto object-contain" priority />
           </a>
           <nav className="hidden items-center gap-10 text-[11px] uppercase tracking-[0.2em] font-medium text-charcoal/70 md:flex">
             <a href="#collections" className="hover:text-deepgold transition-colors">Collections</a>
@@ -189,9 +189,14 @@ export default async function Home() {
       <footer className="bg-charcoal text-ivory">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-3 lg:px-10">
           <div>
-            <p className="font-serif text-3xl">NEXORA Jeweller</p>
+            <span className="inline-block rounded-full bg-ivory px-5 py-2">
+              <Image src="/logo.png" alt="Nexora Jewellers" width={160} height={40} className="h-[36px] w-auto object-contain" loading="lazy" />
+            </span>
             <p className="mt-3 text-[14px] font-light text-ivory/60">
-              Rings · Necklaces · Earrings · Bangles. Client logo &amp; photos swap in when shared.
+              Rings · Necklaces · Earrings · Bangles. Bhagwan Nagar, Nagpur.
+            </p>
+            <p className="mt-3 text-[11px] font-light text-ivory/40">
+              3D necklace model: “Necklace01” by lil_lunamoth, licensed CC-BY-4.0.
             </p>
           </div>
           <div className="text-[14px] text-ivory/70">

@@ -1,23 +1,25 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, FaceLandmarker, HandLandmarker } from '@mediapipe/tasks-vision';
-import { getProductCutout, drawFitted, Smoother, FACE, HAND, mid, dist, segAngle } from '@/lib/tryon';
+import { getRawImage, getProductCutout, drawFitted, Smoother, FACE, HAND, mid, dist, segAngle } from '@/lib/tryon';
 
-export default function MediaPipeAR({ 
-  category, 
-  imageUrl, 
-  onClose 
-}: { 
-  category: string, 
-  imageUrl: string, 
-  onClose: () => void 
+export default function MediaPipeAR({
+  category,
+  imageUrl,
+  onClose
+}: {
+  category: string,
+  imageUrl: string,
+  onClose: () => void
 }) {
-  const [status, setStatus] = useState('Downloading ML models (approx 5MB)...');
+  const [status, setStatus] = useState('Loading photo...');
   const [progress, setProgress] = useState(10);
+  const [hd, setHd] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reqRef = useRef<number>(0);
   const smootherRef = useRef(new Smoother(0.2));
+  const cutoutRef = useRef<CanvasImageSource | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -30,78 +32,98 @@ export default function MediaPipeAR({
         const isFace = category === 'Earrings' || category === 'Necklaces';
         const isHand = category === 'Rings' || category === 'Bangles';
 
-        setStatus('Downloading ML models (approx 5MB)...');
+        // 1. Raw photo FIRST — instant, so the mirror is never blocked by AI.
+        setStatus('Loading photo...');
+        cutoutRef.current = await getRawImage(imageUrl);
+        if (!active) return;
+        setProgress(25);
+
+        // 2. Tracking engine (GPU, with CPU fallback for older phones).
+        setStatus('Starting tracking engine...');
         const vision = await FilesetResolver.forVisionTasks(
           "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
         );
-        setProgress(30);
-
         if (!active) return;
-        setStatus('Warming up AI engine...');
+        setProgress(45);
+
+        const makeOpts = (modelAssetPath: string, delegate: 'GPU' | 'CPU') => ({
+          baseOptions: { modelAssetPath, delegate },
+          runningMode: 'VIDEO' as const,
+          numFaces: 1,
+          numHands: 1
+        });
 
         if (isFace) {
-          faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
-            baseOptions: {
-              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-              delegate: "GPU"
-            },
-            runningMode: "VIDEO",
-            numFaces: 1
-          });
+          try {
+            faceLandmarker = await FaceLandmarker.createFromOptions(vision, makeOpts(
+              "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task", "GPU"));
+          } catch {
+            faceLandmarker = await FaceLandmarker.createFromOptions(vision, makeOpts(
+              "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task", "CPU"));
+          }
         }
         if (isHand) {
-          handLandmarker = await HandLandmarker.createFromOptions(vision, {
-            baseOptions: {
-              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
-              delegate: "GPU"
-            },
-            runningMode: "VIDEO",
-            numHands: 1
-          });
+          try {
+            handLandmarker = await HandLandmarker.createFromOptions(vision, makeOpts(
+              "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task", "GPU"));
+          } catch {
+            handLandmarker = await HandLandmarker.createFromOptions(vision, makeOpts(
+              "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task", "CPU"));
+          }
         }
-        
-        setProgress(60);
-        if (!active) return;
-        setStatus('Extracting jewelry cutout...');
 
-        const cutout = await getProductCutout(imageUrl);
-
-        setProgress(80);
         if (!active) return;
+        setProgress(65);
         setStatus('Starting camera...');
 
+        // 3. Camera LIVE — overlay works immediately with the raw photo.
         stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           await videoRef.current.play();
+          if (canvasRef.current && videoRef.current.videoWidth) {
+            canvasRef.current.width = videoRef.current.videoWidth;
+            canvasRef.current.height = videoRef.current.videoHeight;
+          }
         }
 
+        if (!active) return;
         setProgress(100);
-        setStatus(''); // Ready
+        setStatus(''); // Ready — live with photo, AI cutout upgrades silently.
+
+        // 4. AI cutout upgrades in the BACKGROUND (cached + time-boxed in lib).
+        getProductCutout(imageUrl).then((ai) => {
+          if (active && ai) {
+            cutoutRef.current = ai;
+            setHd(true);
+          }
+        });
 
         // Render loop
         let lastTime = -1;
         const render = () => {
           if (!active) return;
-          if (videoRef.current && canvasRef.current && cutout) {
+          if (videoRef.current && canvasRef.current && cutoutRef.current) {
             const video = videoRef.current;
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
             if (ctx && video.videoWidth) {
-              // Match canvas size to video aspect ratio
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-              
+              if (canvas.width !== video.videoWidth) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+              }
+              const cutout = cutoutRef.current;
+
               // Draw video background mirrored
               ctx.save();
               ctx.scale(-1, 1);
               ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
               ctx.restore();
 
-              let startTimeMs = performance.now();
+              const startTimeMs = performance.now();
               if (lastTime !== video.currentTime) {
                 lastTime = video.currentTime;
-                
+
                 if (isFace && faceLandmarker) {
                   const res = faceLandmarker.detectForVideo(video, startTimeMs);
                   if (res.faceLandmarks.length > 0) {
@@ -111,7 +133,7 @@ export default function MediaPipeAR({
                     const chin = lm[FACE.CHIN];
 
                     // Map normalized coordinates to canvas (Mirrored X)
-                    const pL = { x: (1 - left.x) * canvas.width, y: left.y * canvas.height }; 
+                    const pL = { x: (1 - left.x) * canvas.width, y: left.y * canvas.height };
                     const pR = { x: (1 - right.x) * canvas.width, y: right.y * canvas.height };
                     const pC = { x: (1 - chin.x) * canvas.width, y: chin.y * canvas.height };
 
@@ -175,7 +197,7 @@ export default function MediaPipeAR({
         reqRef.current = requestAnimationFrame(render);
       } catch (err) {
         console.error(err);
-        if (active) setStatus('Error loading AI Engine. Please check camera permissions.');
+        if (active) setStatus('Error loading AI Engine. Please check camera permissions and connection, then retry.');
       }
     };
     init();
@@ -199,7 +221,7 @@ export default function MediaPipeAR({
              <div className="h-full bg-deepgold transition-all duration-300" style={{ width: `${progress}%` }}></div>
           </div>
           <p className="text-xs text-center text-white/50 max-w-xs leading-relaxed">
-            The AI runs locally on your device for total privacy. The initial download takes a moment on slow connections.
+            The AI runs locally on your device for total privacy. Camera opens first — the HD cutout enhances automatically.
           </p>
           <button onClick={onClose} className="absolute top-10 right-6 text-xs uppercase tracking-widest text-white/50 hover:text-white border border-white/20 px-4 py-2 rounded-full">Cancel</button>
         </div>
@@ -211,7 +233,7 @@ export default function MediaPipeAR({
       {!status && (
         <div className="absolute top-10 w-full px-6 flex justify-between items-start z-[102]">
           <p className="bg-black/50 text-white text-[11px] uppercase tracking-widest px-4 py-2 border border-white/20 rounded-full backdrop-blur-md">
-            AI Auto-Tracking
+            AI Auto-Tracking{hd ? ' ✦ HD' : ''}
           </p>
           <button onClick={onClose} className="bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30">
             ✕

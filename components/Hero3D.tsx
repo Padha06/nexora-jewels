@@ -1,52 +1,8 @@
 'use client';
 
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
-import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
-
-// GLB Mannequin loaded from client's file
-function Mannequin() {
-  const { scene } = useGLTF('/bust.glb');
-  
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        // Apply a premium luxury marble/resin look to the bust for the homepage
-        mesh.material = new THREE.MeshPhysicalMaterial({ 
-          color: '#fdfbf6', 
-          roughness: 0.3,
-          metalness: 0.1,
-          clearcoat: 0.5,
-          clearcoatRoughness: 0.2
-        });
-      }
-    });
-  }, [scene]);
-
-  return <primitive object={scene} />;
-}
-useGLTF.preload('/bust.glb');
-
-// Actual Necklace loaded from client's file
-function RealNecklace() {
-  const { scene } = useGLTF('/necklace_models/scene.gltf');
-  
-  useEffect(() => {
-    // Optional: enforce a high-end gold material if the source GLTF materials aren't PBR perfect
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        // Comment out the line below to use the necklace's original native materials
-        // mesh.material = new THREE.MeshStandardMaterial({ color: '#FFD700', metalness: 1, roughness: 0.15 });
-      }
-    });
-  }, [scene]);
-
-  return <primitive object={scene} />;
-}
-useGLTF.preload('/necklace_models/scene.gltf');
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment, ContactShadows, Bounds } from '@react-three/drei';
+import NecklaceOnBust from './NecklaceOnBust';
 
 // Signature 3D hero piece — homepage only
 export default function Hero3D() {
@@ -62,15 +18,8 @@ export default function Hero3D() {
         
         <Bounds fit clip observe margin={0.9}>
           <group position={[0, -1, 0]}> {/* Shift down slightly so it's centered in the viewport */}
-            <Center position={[0, 0, 0]}>
-              <Mannequin />
-            </Center>
-            {/* Center the necklace to strip its native GLTF offset, then position it on the neck */}
-            <Center position={[0, 1.35, 0.25]}>
-              <group rotation={[-0.15, 0, 0]} scale={3.5}>
-                <RealNecklace />
-              </group>
-            </Center>
+            {/* Necklace auto-seated on the bust from measured bounding boxes */}
+            <NecklaceOnBust finish="marble" />
           </group>
         </Bounds>
         

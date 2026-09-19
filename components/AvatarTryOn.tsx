@@ -1,55 +1,15 @@
 'use client';
 
-import { useState, useRef, Suspense, useEffect } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
-import * as THREE from 'three';
+import { OrbitControls, Environment, ContactShadows, Bounds } from '@react-three/drei';
+import NecklaceOnBust from './NecklaceOnBust';
 
 const SKIN_TONES = {
   Fair: '#f1c27d',
   Wheatish: '#e0ac69',
   Dusky: '#8d5524',
 };
-
-// GLB Mannequin loaded from client's file
-function Mannequin({ skinTone }: { skinTone: string }) {
-  const { scene } = useGLTF('/bust.glb');
-  
-  useEffect(() => {
-    // Apply the selected skin tone to all meshes in the loaded bust
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.material = new THREE.MeshStandardMaterial({ 
-          color: skinTone, 
-          roughness: 0.4,
-          metalness: 0.1
-        });
-      }
-    });
-  }, [scene, skinTone]);
-
-  // We use the <Center> component in the parent to auto-scale and center this arbitrary GLB
-  return <primitive object={scene} />;
-}
-// Preload for instant switching
-useGLTF.preload('/bust.glb');
-
-// Actual Necklace loaded from client's file
-function RealNecklace() {
-  const { scene } = useGLTF('/necklace_models/scene.gltf');
-  
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-      }
-    });
-  }, [scene]);
-
-  return <primitive object={scene} />;
-}
-useGLTF.preload('/necklace_models/scene.gltf');
 
 export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
   const [skin, setSkin] = useState<keyof typeof SKIN_TONES>('Wheatish');
@@ -93,15 +53,8 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
             
         <Bounds fit clip observe margin={0.9}>
           <group position={[0, -1, 0]}>
-            <Center position={[0, 0, 0]}>
-              <Mannequin skinTone={SKIN_TONES[skin]} />
-            </Center>
-            {/* Center the necklace to strip its native GLTF offset, then position it on the neck */}
-            <Center position={[0, 1.35, 0.25]}>
-              <group rotation={[-0.15, 0, 0]} scale={3.5}>
-                <RealNecklace />
-              </group>
-            </Center>
+            {/* Necklace auto-seated on the bust; skin tone switches live */}
+            <NecklaceOnBust finish={SKIN_TONES[skin]} />
           </group>
         </Bounds>
             
