@@ -1,5 +1,6 @@
 // Shared math + real-product cutouts for per-product AR try-on.
 // Face anchors: MediaPipe FaceLandmarker (478 pts). Hand anchors: HandLandmarker (21 pts).
+import { get, set } from 'idb-keyval';
 
 export interface Pt {
   x: number;
@@ -57,9 +58,20 @@ export function getProductCutout(src: string): Promise<CanvasImageSource | null>
       src,
       (async () => {
         try {
+          // Check IndexedDB cache first for instant loading on return visits
+          const cachedBlob = await get(`cutout_${src}`);
+          if (cachedBlob) {
+            return await createImageBitmap(cachedBlob);
+          }
+
+          // If not cached, run the AI background removal
           const cdn = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
           const { removeBackground } = await import(/* webpackIgnore: true */ cdn);
           const blob = await removeBackground(src);
+          
+          // Save to IndexedDB for next time
+          await set(`cutout_${src}`, blob);
+          
           return await createImageBitmap(blob);
         } catch {
           try {

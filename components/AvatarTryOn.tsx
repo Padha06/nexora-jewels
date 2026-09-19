@@ -92,13 +92,17 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
             <spotLight position={[5, 10, 5]} intensity={1} penumbra={1} angle={0.5} />
             
         <Bounds fit clip observe margin={0.9}>
-          <Center position={[0, 0, 0]}>
-            <Mannequin skinTone={SKIN_TONES[skin]} />
-            {/* User-provided transform values for the real necklace */}
-            <group position={[0, 0.42, 0.08]} rotation={[-0.15, 0, 0]} scale={0.9}>
-              <RealNecklace />
-            </group>
-          </Center>
+          <group position={[0, -1, 0]}>
+            <Center position={[0, 0, 0]}>
+              <Mannequin skinTone={SKIN_TONES[skin]} />
+            </Center>
+            {/* Center the necklace to strip its native GLTF offset, then position it on the neck */}
+            <Center position={[0, 1.35, 0.25]}>
+              <group rotation={[-0.15, 0, 0]} scale={3.5}>
+                <RealNecklace />
+              </group>
+            </Center>
+          </group>
         </Bounds>
             
             <ContactShadows position={[0, -2.5, 0]} opacity={0.5} scale={10} blur={2} far={4} />

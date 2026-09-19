@@ -61,13 +61,17 @@ export default function Hero3D() {
         <pointLight position={[-5, 2, -3]} intensity={40} color="#c6a15b" />
         
         <Bounds fit clip observe margin={0.9}>
-          <Center position={[0, 0, 0]}>
-            <Mannequin />
-            {/* User-provided transform values for the real necklace */}
-            <group position={[0, 0.42, 0.08]} rotation={[-0.15, 0, 0]} scale={0.9}>
-              <RealNecklace />
-            </group>
-          </Center>
+          <group position={[0, -1, 0]}> {/* Shift down slightly so it's centered in the viewport */}
+            <Center position={[0, 0, 0]}>
+              <Mannequin />
+            </Center>
+            {/* Center the necklace to strip its native GLTF offset, then position it on the neck */}
+            <Center position={[0, 1.35, 0.25]}>
+              <group rotation={[-0.15, 0, 0]} scale={3.5}>
+                <RealNecklace />
+              </group>
+            </Center>
+          </group>
         </Bounds>
         
         <ContactShadows position={[0, -2.2, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
