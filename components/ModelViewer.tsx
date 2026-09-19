@@ -5,11 +5,13 @@ import { useEffect } from 'react';
 // Using a generic rings/jewelry GLB URL from Google's model-viewer examples if available, 
 // or providing a fallback that the user can replace with their own.
 export default function ModelViewer({
-  src = '/models/gold-ring.glb',
+  src = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+  iosSrc,
   alt = '22K Gold Ring',
   fallbackImage = 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800'
 }: {
   src?: string;
+  iosSrc?: string;
   alt?: string;
   fallbackImage?: string;
 }) {
@@ -27,10 +29,11 @@ export default function ModelViewer({
       {/* @ts-ignore - model-viewer is a custom element */}
       <model-viewer
         src={src}
+        {...(iosSrc ? { 'ios-src': iosSrc } : {})}
         alt={alt}
-        auto-rotate="true"
-        camera-controls="true"
-        ar="true"
+        auto-rotate
+        camera-controls
+        ar
         ar-modes="webxr scene-viewer quick-look"
         shadow-intensity="1"
         style={{ width: '100%', height: '400px', backgroundColor: 'transparent' }}
