@@ -9,6 +9,16 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
   const [slug, setSlug] = useState<string | null>(product?.slug ?? null);
   const active = all.find((p) => p.slug === slug) ?? null;
 
+  const [currentUrl, setCurrentUrl] = useState('');
+
+  // Set the current URL dynamically so the QR code works correctly
+  // whether on localhost, a local IP, or in production.
+  useEffect(() => {
+    if (active?.slug) {
+      setCurrentUrl(`${window.location.origin}/try-on?product=${active.slug}`);
+    }
+  }, [active?.slug]);
+
   if (!active) {
     return (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -34,13 +44,11 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
     return 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Lantern/glTF-Binary/Lantern.glb'; // Earrings/Necklaces
   };
 
-    const [currentUrl, setCurrentUrl] = useState('');
-
-  // Set the current URL dynamically so the QR code works correctly
-  // whether on localhost, a local IP, or in production.
-  useEffect(() => {
-    setCurrentUrl(`${window.location.origin}/try-on?product=${active.slug}`);
-  }, [active.slug]);
+  const getUsdzUrl = (category: string) => {
+    if (category === 'Rings') return 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.usdz';
+    if (category === 'Bangles') return 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Corset/glTF-Binary/Corset.usdz';
+    return 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Lantern/glTF-Binary/Lantern.usdz'; // Earrings/Necklaces
+  };
 
   return (
     <div>
@@ -51,7 +59,7 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
       
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="rounded-[24px] bg-white border border-sand p-4 shadow-sm">
-           <ModelViewer src={getGlbUrl(active.category)} alt={active.name} fallbackImage={active.images[0]} />
+           <ModelViewer src={getGlbUrl(active.category)} iosSrc={getUsdzUrl(active.category)} alt={active.name} fallbackImage={active.images[0]} />
         </div>
 
         <div className="hidden lg:flex flex-col justify-center space-y-6">

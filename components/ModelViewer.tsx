@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 // or providing a fallback that the user can replace with their own.
 export default function ModelViewer({
   src = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
-  iosSrc,
+  iosSrc = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.usdz',
   alt = '22K Gold Ring',
   fallbackImage = 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800'
 }: {
