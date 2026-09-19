@@ -29,28 +29,24 @@ function Mannequin() {
 }
 useGLTF.preload('/bust.glb');
 
-// Procedural Placeholder Necklace
-function GoldNecklace() {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Choker/Chain around the neck */}
-      <mesh position={[0, 0, 0]} rotation={[Math.PI / 2 + 0.2, 0, 0]}>
-        <torusGeometry args={[0.48, 0.03, 32, 100]} />
-        <meshStandardMaterial color="#FFD700" metalness={1} roughness={0.15} envMapIntensity={2} />
-      </mesh>
-      {/* Pendant hanging down */}
-      <mesh position={[0, -0.35, 0.45]} rotation={[Math.PI / 4, 0, Math.PI / 4]}>
-        <octahedronGeometry args={[0.15]} />
-        <meshStandardMaterial color="#FFD700" metalness={1} roughness={0.1} envMapIntensity={2.5} />
-      </mesh>
-      {/* Diamond in the center */}
-      <mesh position={[0, -0.35, 0.55]}>
-        <sphereGeometry args={[0.05, 32, 32]} />
-        <meshPhysicalMaterial color="#FFFFFF" metalness={0.1} roughness={0} transmission={1} ior={2.4} thickness={0.5} envMapIntensity={3} />
-      </mesh>
-    </group>
-  );
+// Actual Necklace loaded from client's file
+function RealNecklace() {
+  const { scene } = useGLTF('/necklace_models/scene.gltf');
+  
+  useEffect(() => {
+    // Optional: enforce a high-end gold material if the source GLTF materials aren't PBR perfect
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        // Comment out the line below to use the necklace's original native materials
+        // mesh.material = new THREE.MeshStandardMaterial({ color: '#FFD700', metalness: 1, roughness: 0.15 });
+      }
+    });
+  }, [scene]);
+
+  return <primitive object={scene} />;
 }
+useGLTF.preload('/necklace_models/scene.gltf');
 
 // Signature 3D hero piece — homepage only
 export default function Hero3D() {
@@ -69,7 +65,7 @@ export default function Hero3D() {
             <Mannequin />
             {/* Adjusted position/scale specifically for the uploaded bust.glb */}
             <group position={[0, 0.28, 0.03]} rotation={[-0.15, 0, 0]} scale={0.18}>
-              <GoldNecklace />
+              <RealNecklace />
             </group>
           </Center>
         </Bounds>

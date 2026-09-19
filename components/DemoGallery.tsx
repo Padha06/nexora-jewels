@@ -5,22 +5,22 @@ import ModelViewer from './ModelViewer';
 export default function DemoGallery() {
   const models = [
     {
-      id: 'ring',
-      name: '22K Solitaire Ring',
-      src: 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
-      fallback: 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=600'
+      id: 'necklace',
+      name: 'Custom 3D Necklace',
+      src: '/necklace_models/scene.gltf',
+      fallback: 'https://images.unsplash.com/photo-1599643478514-4a4e06d649d0?auto=format&fit=crop&q=80&w=600'
     },
     {
-      id: 'bangle',
-      name: 'Bridal Gold Bangle',
-      src: 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Corset/glTF-Binary/Corset.glb',
+      id: 'bust',
+      name: 'Jewellery Designer Bust',
+      src: '/bust.glb',
       fallback: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=600'
     },
     {
-      id: 'earring',
-      name: 'Jhumki Earrings',
-      src: 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Lantern/glTF-Binary/Lantern.glb',
-      fallback: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=600'
+      id: 'ring',
+      name: 'Coming Soon',
+      src: '', // We can leave this blank or point to a placeholder if we want
+      fallback: 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=600'
     }
   ];
 

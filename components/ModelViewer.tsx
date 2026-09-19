@@ -67,23 +67,27 @@ export default function ModelViewer({
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
         </div>
         
-        {/* @ts-ignore */}
-        <model-viewer
-          ref={viewerRef}
-          src={src}
-          {...(iosSrc ? { 'ios-src': iosSrc } : {})}
-          alt={alt}
-          auto-rotate
-          camera-controls
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          shadow-intensity="1"
-          style={{ width: '100%', height: '400px', backgroundColor: 'transparent' }}
-        >
-          <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}></div>
-          <div slot="ar-button" className="hidden"></div>
-        {/* @ts-ignore */}
-        </model-viewer>
+        {src ? (
+          /* @ts-ignore */
+          <model-viewer
+            ref={viewerRef}
+            src={src}
+            {...(iosSrc ? { 'ios-src': iosSrc } : {})}
+            alt={alt}
+            auto-rotate
+            camera-controls
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            shadow-intensity="1"
+            style={{ width: '100%', height: '400px', backgroundColor: 'transparent' }}
+          >
+            <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}></div>
+            <div slot="ar-button" className="hidden"></div>
+          {/* @ts-ignore */}
+          </model-viewer>
+        ) : (
+          <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${fallbackImage})` }}></div>
+        )}
         
         <p className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] uppercase tracking-widest font-bold rounded-sm shadow-sm border border-zinc-200 text-zinc-600">
           Interact to Rotate

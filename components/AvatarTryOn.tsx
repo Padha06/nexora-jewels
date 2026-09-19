@@ -35,28 +35,21 @@ function Mannequin({ skinTone }: { skinTone: string }) {
 // Preload for instant switching
 useGLTF.preload('/bust.glb');
 
-// Procedural Placeholder Necklace
-function GoldNecklace() {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Choker/Chain around the neck */}
-      <mesh position={[0, 0, 0]} rotation={[Math.PI / 2 + 0.2, 0, 0]}>
-        <torusGeometry args={[0.48, 0.03, 32, 100]} />
-        <meshStandardMaterial color="#FFD700" metalness={1} roughness={0.15} envMapIntensity={2} />
-      </mesh>
-      {/* Pendant hanging down */}
-      <mesh position={[0, -0.35, 0.45]} rotation={[Math.PI / 4, 0, Math.PI / 4]}>
-        <octahedronGeometry args={[0.15]} />
-        <meshStandardMaterial color="#FFD700" metalness={1} roughness={0.1} envMapIntensity={2.5} />
-      </mesh>
-      {/* Diamond in the center */}
-      <mesh position={[0, -0.35, 0.55]}>
-        <sphereGeometry args={[0.05, 32, 32]} />
-        <meshPhysicalMaterial color="#FFFFFF" metalness={0.1} roughness={0} transmission={1} ior={2.4} thickness={0.5} envMapIntensity={3} />
-      </mesh>
-    </group>
-  );
+// Actual Necklace loaded from client's file
+function RealNecklace() {
+  const { scene } = useGLTF('/necklace_models/scene.gltf');
+  
+  useEffect(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+      }
+    });
+  }, [scene]);
+
+  return <primitive object={scene} />;
 }
+useGLTF.preload('/necklace_models/scene.gltf');
 
 export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
   const [skin, setSkin] = useState<keyof typeof SKIN_TONES>('Wheatish');
@@ -103,7 +96,7 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
             <Mannequin skinTone={SKIN_TONES[skin]} />
             {/* Adjusted position/scale specifically for the uploaded bust.glb */}
             <group position={[0, 0.28, 0.03]} rotation={[-0.15, 0, 0]} scale={0.18}>
-              <GoldNecklace />
+              <RealNecklace />
             </group>
           </Center>
         </Bounds>
