@@ -49,74 +49,75 @@ export default async function Home() {
   };
 
   return (
-    <main>
+    <main className="min-h-screen bg-cream text-charcoal">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
       <RateTicker />
 
-      {/* nav */}
-      <header className="sticky top-0 z-50 border-b border-sand bg-ivory/85 backdrop-blur-md">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6 lg:px-10">
-          <span className="font-serif text-[26px] tracking-wide flex items-center gap-2">
-            NEXORA <span className="italic text-deepgold">Jeweller</span>
-            <span className="hidden sm:inline-block ml-3 px-2 py-0.5 border border-amber-300 bg-amber-50 text-[9px] uppercase tracking-widest text-amber-800 rounded-sm">BIS Hallmarked 916</span>
-          </span>
-          <nav className="hidden items-center gap-9 text-[13px] uppercase tracking-[0.18em] text-charcoal/80 md:flex">
-            <a href="#collections" className="hover:text-deepgold">Collections</a>
-            <a href="#flagship" className="hover:text-deepgold">Flagship</a>
-            <a href="/try-on" className="hover:text-deepgold">Virtual Try-On</a>
-            <a href="#visit" className="hover:text-deepgold">Visit</a>
+      {/* Polished Header */}
+      <header className="fixed top-0 z-[60] w-full bg-cream/90 backdrop-blur-md border-b border-sand/50">
+        <div className="mx-auto flex h-[80px] max-w-7xl items-center justify-between px-6 lg:px-10">
+          <a href="#" className="flex items-center gap-3">
+            <Image src="/logo.jpg" alt="Nexora Jewellers" width={160} height={40} className="h-[40px] w-auto object-contain mix-blend-darken" />
+          </a>
+          <nav className="hidden items-center gap-10 text-[11px] uppercase tracking-[0.2em] font-medium text-charcoal/70 md:flex">
+            <a href="#collections" className="hover:text-deepgold transition-colors">Collections</a>
+            <a href="#flagship" className="hover:text-deepgold transition-colors">High Jewelry</a>
+            <a href="/try-on" className="hover:text-deepgold transition-colors">Virtual Try-On</a>
+            <a href="#visit" className="hover:text-deepgold transition-colors">Boutique</a>
           </nav>
           <a
             href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hi ${SHOP_NAME}! Please share today's gold rate`)}`}
             target="_blank"
-            className="border border-charcoal px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] transition hover:bg-charcoal hover:text-ivory"
+            className="border border-charcoal/20 px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition hover:bg-charcoal hover:text-ivory rounded-full shadow-sm"
           >
             Gold rate
           </a>
         </div>
       </header>
 
-      {/* hero */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-10 pt-14 lg:grid-cols-2 lg:px-10 lg:pb-16 lg:pt-20">
-          <div>
-            <p className="eyebrow mb-6">Nagpur · Bhagwan Nagar</p>
-            <h1 className="font-serif text-[56px] leading-[0.95] sm:text-[76px] lg:text-[92px]">
-              Heirlooms,
-              <br />
-              <span className="italic text-deepgold">reimagined</span>
-              <br />
-              in gold.
-            </h1>
-            <p className="mt-7 max-w-md text-[17px] font-light leading-relaxed text-charcoal/70">
-              Live rates on top. Exact price with making charges + GST on every piece.
-              Order on WhatsApp in one tap — pickup at store, zero commission.
+      {/* Luxury Hero Section */}
+      <section className="relative min-h-screen flex items-center pt-[80px] overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div className="mx-auto grid max-w-7xl w-full gap-12 px-6 lg:grid-cols-2 lg:px-10 items-center">
+          <div className="relative z-10 pt-10 lg:pt-0">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-deepgold font-bold mb-8">
+              <TextReveal delay={0.1}>The Art of Adornment</TextReveal>
             </p>
-            <div className="mt-9 flex flex-wrap gap-4">
-              <a href="#collections" className="bg-charcoal px-8 py-4 text-[12px] uppercase tracking-[0.2em] text-ivory transition hover:bg-deepgold shadow-lg shadow-black/10">
-                Shop with live pricing
+            <h1 className="font-serif text-[60px] leading-[0.9] sm:text-[80px] lg:text-[100px] text-charcoal">
+              <div className="overflow-hidden pb-2"><TextReveal delay={0.3}>Heirlooms,</TextReveal></div>
+              <div className="overflow-hidden pb-2"><TextReveal delay={0.5}><span className="italic text-deepgold">reimagined</span></TextReveal></div>
+              <div className="overflow-hidden pb-2"><TextReveal delay={0.7}>in gold.</TextReveal></div>
+            </h1>
+            <div className="mt-10 max-w-md text-[15px] font-light leading-relaxed text-charcoal/70">
+              <TextReveal delay={0.9}>
+                Discover BIS-hallmarked craftsmanship. Live pricing, transparent making charges, and seamless WhatsApp ordering directly from our Nagpur boutique.
+              </TextReveal>
+            </div>
+            
+            <div className="mt-12 flex flex-wrap gap-5">
+              <a href="#collections" className="bg-charcoal px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-ivory transition hover:bg-deepgold rounded-full shadow-xl shadow-charcoal/10">
+                Explore Collections
               </a>
               <a
-                href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi! I want to join the monthly Gold Savings Scheme')}`}
-                target="_blank"
-                className="border border-deepgold text-deepgold bg-deepgold/5 px-8 py-4 text-[12px] uppercase tracking-[0.2em] transition hover:bg-deepgold hover:text-ivory"
+                href="#visit"
+                className="border border-charcoal/20 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] transition hover:bg-white rounded-full flex items-center gap-3"
               >
-                Gold Savings Scheme
+                <span>Visit Boutique</span>
+                <span className="w-8 h-[1px] bg-charcoal/30 inline-block"></span>
               </a>
             </div>
-            <div className="mt-10 flex flex-wrap gap-2.5 text-[12px]">
-              {['✓ BIS 916 Hallmark', '✓ Live rate pricing', '✓ Making charges shown', '✓ WhatsApp ordering'].map((b) => (
-                <span key={b} className="border border-sand bg-white px-4 py-2 shadow-sm">{b}</span>
-              ))}
-            </div>
           </div>
-          <div className="spot-card rounded-[28px] border-gold/40 shadow-xl overflow-hidden bg-white p-4">
-            <div className="flex items-center justify-between px-2 pt-2 pb-4 text-[11px] uppercase tracking-[0.25em] text-charcoal/60">
-              <span>Solitaire nº 1 — 22K</span>
-              <span className="text-deepgold font-bold">● Live 360° AR</span>
+          
+          <div className="relative h-[500px] lg:h-[700px] flex items-center justify-center">
+            {/* Signature 3D Piece floats here cleanly */}
+            <div className="absolute inset-0 scale-110">
+              <ModelViewer 
+                src="https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb" 
+                alt="Signature Piece" 
+              />
             </div>
-            {/* The newly requested model-viewer component replaces the threejs one */}
-            <ModelViewer />
           </div>
         </div>
       </section>
