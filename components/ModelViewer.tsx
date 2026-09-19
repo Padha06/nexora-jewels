@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import MediaPipeAR from './MediaPipeAR';
 import AvatarTryOn from './AvatarTryOn';
+import Hero3D from './Hero3D';
 
 export default function ModelViewer({
   src = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
@@ -67,7 +68,11 @@ export default function ModelViewer({
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
         </div>
         
-        {src ? (
+        {src === 'combined-bust' ? (
+          <div className="absolute inset-0 z-10">
+            <Hero3D />
+          </div>
+        ) : src ? (
           /* @ts-ignore */
           <model-viewer
             ref={viewerRef}
