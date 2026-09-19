@@ -11,6 +11,7 @@ import StoreSections from '@/components/StoreSections';
 import Faq from '@/components/Faq';
 import ModelViewer from '@/components/ModelViewer';
 import DemoGallery from '@/components/DemoGallery';
+import { TextReveal } from '@/components/TextReveal';
 
 export const metadata: Metadata = {
   title: 'NEXORA Jeweller — BIS Hallmarked Fine Jewellery',
