@@ -56,9 +56,9 @@ export const products: Product[] = [
     makingPct: 14,
     priceInr: null,
     images: [
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=1000&q=80&auto=format&fit=crop'
+      '/temple-necklace.jpg'
     ],
-    description: 'Hand-chased temple pendant on a beaded chain. Placeholder photo until client shoot.'
+    description: 'Antique-finish temple necklace with ruby, emerald and pearl detailing. Photographed at our Nagpur boutique.'
   },
   {
     slug: 'chandbali-earrings',
@@ -107,7 +107,7 @@ export const categories: { name: Category; tagline: string; image: string }[] = 
   {
     name: 'Necklaces',
     tagline: 'Polki · temple · pendants',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=700&q=70&auto=format&fit=crop'
+    image: '/temple-necklace.jpg'
   },
   {
     name: 'Earrings',

@@ -56,13 +56,13 @@ export default function ModelViewer({
         />
       )}
 
-      <div className="relative w-full overflow-hidden rounded-2xl bg-zinc-50 border border-zinc-200 shadow-inner group flex items-center justify-center min-h-[400px]">
+      <div className={`relative w-full overflow-hidden rounded-2xl group flex items-center justify-center min-h-[400px] ${src === 'showcase' ? 'bg-transparent' : 'bg-zinc-50 border border-zinc-200 shadow-inner'}`}>
         <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-0 transition duration-500 pointer-events-none">
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
         </div>
         
         {src === 'showcase' ? (
-          <div className="absolute inset-0 z-10">
+          <div className="relative z-10 h-[560px] w-full lg:h-[680px]">
             <Hero3D />
           </div>
         ) : src ? (

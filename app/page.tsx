@@ -76,46 +76,73 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* Luxury Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-[80px] overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div className="mx-auto grid max-w-7xl w-full gap-12 px-6 lg:grid-cols-2 lg:px-10 items-center">
-          <div className="relative z-10 pt-10 lg:pt-0">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-deepgold font-bold mb-8">
-              <TextReveal delay={0.1}>The Art of Adornment</TextReveal>
+      {/* Hero — rebuilt: editorial calm, arch-framed 3D, zero photography */}
+      <section className="relative overflow-hidden pt-[80px]">
+        {/* theme glow field */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 55% 40% at 78% 32%, rgba(198,161,91,0.16), transparent 65%), radial-gradient(ellipse 40% 30% at 12% 78%, rgba(198,161,91,0.10), transparent 60%)'
+          }}
+        />
+        {/* hairline horizon */}
+        <div className="pointer-events-none absolute left-0 right-0 top-[80px] hidden justify-center lg:flex">
+          <div className="gold-line w-full max-w-7xl opacity-60" />
+        </div>
+
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-6 pb-10 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-10 lg:pt-14">
+          <div className="relative z-10">
+            <p className="mb-7 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-deepgold">
+              <span className="inline-block h-px w-10 bg-deepgold/60" />
+              <TextReveal delay={0.1}>BIS-Hallmarked Temple Jewellery</TextReveal>
             </p>
-            <h1 className="font-serif text-[60px] leading-[0.9] sm:text-[80px] lg:text-[100px] text-charcoal">
+            <h1 className="font-serif text-[58px] leading-[0.95] text-charcoal sm:text-[84px] lg:text-[96px]">
               <span className="block overflow-hidden pb-2"><TextReveal delay={0.3}>Heirlooms,</TextReveal></span>
               <span className="block overflow-hidden pb-2"><TextReveal delay={0.5}><span className="italic text-deepgold">reimagined</span></TextReveal></span>
               <span className="block overflow-hidden pb-2"><TextReveal delay={0.7}>in gold.</TextReveal></span>
             </h1>
-            <div className="mt-10 max-w-md text-[15px] font-light leading-relaxed text-charcoal/70">
+            <div className="mt-8 max-w-md text-[15px] font-light leading-relaxed text-charcoal/70">
               <TextReveal delay={0.9}>
-                Discover BIS-hallmarked craftsmanship. Live pricing, transparent making charges, and seamless WhatsApp ordering directly from our Nagpur boutique.
+                Antique-finish 22K gold with ruby, emerald and pearl detailing — priced live,
+                ordered on WhatsApp, picked up at our Nagpur boutique.
               </TextReveal>
             </div>
-            
-            <div className="mt-12 flex flex-wrap gap-5">
-              <a href="#collections" className="bg-charcoal px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-ivory transition hover:bg-deepgold rounded-full shadow-xl shadow-charcoal/10">
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              <a href="#collections" className="bg-charcoal px-9 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-ivory transition hover:bg-deepgold rounded-full shadow-xl shadow-charcoal/10">
                 Explore Collections
               </a>
               <a
                 href="#visit"
-                className="border border-charcoal/20 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] transition hover:bg-white rounded-full flex items-center gap-3"
+                className="border border-charcoal/20 px-9 py-4 text-[11px] font-bold uppercase tracking-[0.2em] transition hover:bg-white rounded-full flex items-center gap-3"
               >
                 <span>Visit Boutique</span>
                 <span className="w-8 h-[1px] bg-charcoal/30 inline-block"></span>
               </a>
             </div>
-          </div>
-          
-          <div className="relative h-[500px] lg:h-[700px] flex items-center justify-center">
-            {/* Signature 3D Piece floats here cleanly */}
-            <div className="absolute inset-0">
-              <Hero3D />
+
+            {/* trust hairlines */}
+            <div className="mt-12 grid max-w-md grid-cols-3 divide-x divide-sand border-y border-sand py-4">
+              {[
+                ['BIS 916', 'Hallmarked'],
+                ['Live Rate', 'Today\u2019s gold'],
+                ['Nagpur', 'Store pickup']
+              ].map(([a, b]) => (
+                <div key={a} className="px-4 first:pl-0">
+                  <p className="font-serif text-xl leading-none">{a}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-charcoal/55">{b}</p>
+                </div>
+              ))}
             </div>
+          </div>
+
+          <div className="relative">
+            {/* Signature 3D piece, moulded into the theme */}
+            <Hero3D />
+            <p className="mt-4 text-center text-[11px] uppercase tracking-[0.3em] text-charcoal/45">
+              Drag to rotate · Antique temple finish
+            </p>
           </div>
         </div>
       </section>
