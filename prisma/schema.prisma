@@ -1,0 +1,33 @@
+// Prisma schema for the "simple admin" choice (SQLite for zero-ops start, Postgres-ready).
+// Product fields match lib/products.ts 1:1 so the placeholder catalog ports without rewrites.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  sku            String   @unique
+  name           String
+  category       String   // Rings | Necklaces | Earrings | Bangles
+  metal          String
+  purity         String   // 22K | 18K | 925
+  grossWeight    String
+  weightG        Float
+  makingCharges  String
+  makingPct      Float
+  stoneCharges   Int?
+  sizes          String?  // JSON array, e.g. ["12","14","16"]
+  priceInr       Int?     // null = live-rate calculator pricing
+  images         String   // JSON array of URLs (kept simple for SQLite)
+  description    String
+  flagship       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

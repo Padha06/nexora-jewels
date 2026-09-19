@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #fdfbf6;
+  --gold: #c6a15b;
+  --deepgold: #9a7b2e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--ivory);
+  -webkit-font-smoothing: antialiased;
+}
+
+.eyebrow {
+  letter-spacing: 0.35em;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--deepgold);
+  font-weight: 600;
+}
+.gold-line {
+  background: linear-gradient(90deg, transparent, #c6a15b, transparent);
+  height: 1px;
+}
+.spot-card {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #ede3d0;
+  transition:
+    transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 0.5s;
+}
+.spot-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(198, 161, 91, 0.18),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+.spot-card:hover::before {
+  opacity: 1;
+}
+.spot-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 60px -20px rgba(154, 123, 46, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
