@@ -23,9 +23,32 @@ export default function ModelViewer({
   }, []);
 
   const handleARClick = () => {
-    if (viewerRef.current) {
-      // Programmatically launch the AR view
-      viewerRef.current.activateAR();
+    try {
+      const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+      const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isAndroid = /android/i.test(ua);
+
+      if (isIOS && iosSrc) {
+        // Direct Apple AR Quick Look launch
+        const anchor = document.createElement('a');
+        anchor.setAttribute('rel', 'ar');
+        anchor.setAttribute('href', iosSrc);
+        anchor.appendChild(document.createElement('img')); // Required by older iOS
+        anchor.click();
+      } else if (isAndroid) {
+        // Direct Google Scene Viewer launch
+        const intentUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(src)}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;`;
+        window.location.href = intentUrl;
+      } else {
+        // Fallback for other systems
+        if (viewerRef.current) {
+          viewerRef.current.activateAR();
+        }
+      }
+    } catch (err) {
+      console.error("AR Launch failed", err);
+      // Failsafe
+      if (viewerRef.current) viewerRef.current.activateAR();
     }
   };
 
