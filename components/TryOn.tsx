@@ -59,7 +59,7 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
       
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="rounded-[24px] bg-white border border-sand p-4 shadow-sm">
-           <ModelViewer src={getGlbUrl(active.category)} iosSrc={getUsdzUrl(active.category)} alt={active.name} fallbackImage={active.images[0]} />
+           <ModelViewer src={getGlbUrl(active.category)} category={active.category} iosSrc={getUsdzUrl(active.category)} alt={active.name} fallbackImage={active.images[0]} />
         </div>
 
         <div className="hidden lg:flex flex-col justify-center space-y-6">
