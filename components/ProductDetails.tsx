@@ -2,14 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import type { Product } from '@/lib/products';
 import { ShopProvider, useShop } from '@/lib/store';
 import PriceCalculator from './PriceCalculator';
 import CartDrawer from './CartDrawer';
+import dynamic from 'next/dynamic';
 
-// Live 3D finish preview — deferred so it never blocks the PDP first paint
-const Hero3D = dynamic(() => import('./Hero3D'), {
+const RingConfiguratorDynamic = dynamic(() => import('./RingConfigurator'), {
   ssr: false,
   loading: () => <div className="flex h-[420px] items-center justify-center bg-cream text-[12px] uppercase tracking-[0.25em] text-charcoal/50">Preparing 360°…</div>
 });
@@ -97,7 +96,7 @@ function DetailsInner({ product, ratePerGram, rateLabel }: { product: Product; r
             </div>
           ) : (
             <div className="overflow-hidden rounded-[20px] border border-sand" style={{ height: 440 }}>
-              <Hero3D metalColor={metal.tint} />
+              <RingConfiguratorDynamic />
               <p className="bg-white px-4 py-2 text-center text-[11px] uppercase tracking-[0.2em] text-charcoal/50">
                 Finish preview — your piece in {metal.name} · drag to rotate
               </p>

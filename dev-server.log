@@ -9,3 +9,56 @@
  ✓ Ready in 3.1s
  ○ Compiling /product/[slug] ...
  ✓ Compiled /product/[slug] in 8.2s (1246 modules)
+ GET /product/temple-pendant-necklace 200 in 10440ms
+ ○ Compiling /icon.png ...
+ ✓ Compiled /icon.png in 697ms (671 modules)
+ GET /icon.png?27b5dba78f75b6dc 200 in 914ms
+ ✓ Compiled in 3.2s (607 modules)
+ ✓ Compiled in 865ms (607 modules)
+ ✓ Compiled in 847ms (607 modules)
+ ✓ Compiled in 2.3s (1232 modules)
+ ⨯ ./components/Hero3D.tsx
+Error: Failed to read source code from C:\Users\User\Documents\Default Project\nexora-jewels\components\Hero3D.tsx
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./components/Hero3D.tsx
+./components/ProductDetails.tsx
+ ⨯ ./components/Hero3D.tsx
+Error: Failed to read source code from C:\Users\User\Documents\Default Project\nexora-jewels\components\Hero3D.tsx
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./components/Hero3D.tsx
+./components/ProductDetails.tsx
+ ⨯ ./components/Hero3D.tsx
+Error: Failed to read source code from C:\Users\User\Documents\Default Project\nexora-jewels\components\Hero3D.tsx
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./components/Hero3D.tsx
+./components/ProductDetails.tsx
+ ⨯ ./components/Hero3D.tsx
+Error: Failed to read source code from C:\Users\User\Documents\Default Project\nexora-jewels\components\Hero3D.tsx
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./components/Hero3D.tsx
+./components/ProductDetails.tsx
+ ⨯ ./components/Hero3D.tsx
+Error: Failed to read source code from C:\Users\User\Documents\Default Project\nexora-jewels\components\Hero3D.tsx
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./components/Hero3D.tsx
+./components/ProductDetails.tsx
