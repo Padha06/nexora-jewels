@@ -19,8 +19,15 @@ const LEAN = 0.12; // top tips back toward the neck, bottom kicks onto chest
 // Necklace seated on the bust from MEASURED bounding boxes — placement is
 // derived from the real geometry, so it survives either GLB being swapped.
 export default function NecklaceOnBust({ finish }: { finish: 'marble' | string }) {
-  const { scene: bust } = useGLTF('/bust.glb');
-  const { scene: necklace } = useGLTF('/necklace_models/scene.gltf');
+  const { scene: bustScene } = useGLTF('/bust.glb');
+  const { scene: neckScene } = useGLTF('/necklace_models/scene.gltf');
+
+  // Clone per mount: one Object3D can only live in ONE canvas — the bust
+  // renders in both the hero and the gallery card, so sharing the cached
+  // scene would silently unparent it from the first canvas (blank view).
+  // Clones share geometry (cheap); each gets its own material below.
+  const bust = useMemo(() => bustScene.clone(true), [bustScene]);
+  const necklace = useMemo(() => neckScene.clone(true), [neckScene]);
 
   // Bust finish: ivory marble for showcase, skin tone for avatar try-on
   useEffect(() => {
