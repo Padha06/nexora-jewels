@@ -23,14 +23,33 @@ export default function ModelViewer({
   }, []);
 
   const [showWebAR, setShowWebAR] = useState(false);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const startCamera = async (mode: 'user' | 'environment') => {
+    try {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const currentStream = videoRef.current.srcObject as MediaStream;
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode } });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+      setFacingMode(mode);
+    } catch (err) {
+      console.error("Camera launch failed", err);
+      alert("Please allow camera permissions to try this piece on.");
+      setShowWebAR(false);
+    }
+  };
 
   const handleARClick = async () => {
     try {
       const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
       const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       
-      // On iOS, Native AR Quick Look is extremely reliable and doesn't have the ARCore fragmentation issue.
       if (isIOS && iosSrc) {
         const anchor = document.createElement('a');
         anchor.setAttribute('rel', 'ar');
@@ -40,19 +59,15 @@ export default function ModelViewer({
         return;
       }
 
-      // For Android and other devices (especially Betas like Android 16 without ARCore), 
-      // we use an instant, ultra-compatible Web Camera Overlay!
       setShowWebAR(true);
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
+      await startCamera('user'); // Default to front camera
     } catch (err) {
-      console.error("Camera launch failed", err);
-      alert("Please allow camera permissions to try this piece on.");
-      setShowWebAR(false);
+      console.error(err);
     }
+  };
+
+  const toggleCamera = () => {
+    startCamera(facingMode === 'user' ? 'environment' : 'user');
   };
 
   const closeWebAR = () => {
@@ -72,28 +87,37 @@ export default function ModelViewer({
           <video 
             ref={videoRef} 
             playsInline 
-            className="absolute inset-0 w-full h-full object-cover" 
+            className={`absolute inset-0 w-full h-full object-cover ${facingMode === 'user' ? '-scale-x-100' : ''}`} 
           />
           
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[101]">
             <img 
               src={fallbackImage} 
               alt={alt} 
-              className="w-2/3 max-w-[250px] drop-shadow-2xl opacity-90 mix-blend-multiply" 
-              style={{ filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.5))' }}
+              className="w-1/2 max-w-[200px] mix-blend-multiply contrast-125 brightness-110" 
+              style={{ filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.4))' }}
             />
           </div>
 
           <div className="absolute top-10 w-full px-6 flex justify-between items-start z-[102]">
-            <p className="bg-black/50 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md">
-              Line up your hand or face with the piece
-            </p>
+            <button 
+              onClick={toggleCamera}
+              className="bg-black/50 text-white px-5 py-2.5 rounded-full flex items-center gap-2 backdrop-blur-md border border-white/20 text-xs font-medium uppercase tracking-widest shadow-xl"
+            >
+              ↻ Flip Camera
+            </button>
             <button 
               onClick={closeWebAR}
               className="bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30"
             >
               ✕
             </button>
+          </div>
+          
+          <div className="absolute bottom-12 text-center w-full px-6 pointer-events-none z-[102]">
+            <p className="bg-black/40 text-white inline-block text-[11px] uppercase tracking-widest px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+              Align your {facingMode === 'user' ? 'face/hand' : 'hand'} with the piece
+            </p>
           </div>
         </div>
       )}
