@@ -54,7 +54,7 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
            <ModelViewer src={getGlbUrl(active.category)} alt={active.name} fallbackImage={active.images[0]} />
         </div>
 
-        <div className="flex flex-col justify-center space-y-6">
+        <div className="hidden lg:flex flex-col justify-center space-y-6">
           <div className="rounded-[18px] border border-sand bg-white p-8 text-center shadow-sm">
             <p className="text-[11px] uppercase tracking-[0.25em] text-deepgold font-bold mb-4">Mobile AR Try-On</p>
             <h3 className="font-serif text-3xl mb-4">Experience it in your space</h3>
@@ -74,6 +74,12 @@ export default function TryOn({ product, all }: { product: Product | null; all: 
               Powered by Google ARCore & Apple ARKit
             </p>
           </div>
+        </div>
+
+        <div className="lg:hidden mt-2 text-center pb-8">
+          <p className="text-[13px] text-charcoal/70">
+            Tap the <strong className="font-bold">AR icon</strong> in the bottom right of the 3D viewer above to place this piece in your environment.
+          </p>
         </div>
       </div>
     </div>

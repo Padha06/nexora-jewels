@@ -28,9 +28,9 @@ export default function ModelViewer({
       <model-viewer
         src={src}
         alt={alt}
-        auto-rotate
-        camera-controls
-        ar
+        auto-rotate="true"
+        camera-controls="true"
+        ar="true"
         ar-modes="webxr scene-viewer quick-look"
         shadow-intensity="1"
         style={{ width: '100%', height: '400px', backgroundColor: 'transparent' }}
@@ -38,12 +38,6 @@ export default function ModelViewer({
         <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}>
            {/* Fallback image shown while model loads */}
         </div>
-        <button 
-          slot="ar-button" 
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-zinc-900 text-white px-6 py-2.5 rounded-full text-[13px] font-medium tracking-widest uppercase shadow-xl hover:bg-zinc-800 transition whitespace-nowrap"
-        >
-          View in AR
-        </button>
       {/* @ts-ignore */}
       </model-viewer>
       
