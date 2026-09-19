@@ -67,7 +67,8 @@ export default function Hero3D() {
         <Bounds fit clip observe margin={1.2}>
           <Center position={[0, 0, 0]}>
             <Mannequin />
-            <group position={[0, 1.2, 0]} scale={1}>
+            {/* Adjusted position/scale specifically for the uploaded bust.glb */}
+            <group position={[0, 0.28, 0.03]} rotation={[-0.15, 0, 0]} scale={0.18}>
               <GoldNecklace />
             </group>
           </Center>
