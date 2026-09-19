@@ -127,7 +127,7 @@ export default function MediaPipeAR({
                        const neckPt = mid(pL, pR);
                        neckPt.y = pC.y + dist(neckPt, pC) * 0.4; // push down below chin
                        const smNeck = smootherRef.current.ema('neck', neckPt);
-                       const angleVec = { x: Math.cos(segAngle(pL, pR)), y: Math.sin(segAngle(pL, pR)) };
+                       const angleVec = { x: Math.cos(segAngle(pR, pL)), y: Math.sin(segAngle(pR, pL)) };
                        const smAngle = smootherRef.current.ema('neckA', angleVec);
                        const ang = Math.atan2(smAngle.y, smAngle.x);
                        const width = dist(pL, pR) * 1.6;
