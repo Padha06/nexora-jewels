@@ -37,11 +37,8 @@ export class Smoother {
 }
 
 // ---- Real product cutouts ----
-// Client-side background removal (@imgly/background-removal, ISNet matting —
-// the same approach Aurea-Tryon uses), cached per URL. Falls back to the raw
-// photo if matting fails. Demo honesty: catalog lifestyle photos cut roughly;
-// the client's own plain-background product PNGs cut cleanly through this
-// exact pipeline with zero code changes.
+// We now bypass heavy background removal for instant loading.
+// The client will upload pre-cutout transparent PNGs for products.
 const cutoutCache = new Map<string, Promise<CanvasImageSource | null>>();
 
 function loadRaw(src: string): Promise<HTMLImageElement> {
@@ -60,21 +57,12 @@ export function getProductCutout(src: string): Promise<CanvasImageSource | null>
       src,
       (async () => {
         try {
-          // Runtime-only CDN load (webpackIgnore): bundling onnxruntime's node
-          // build breaks `next build`, and the browser ESM build is what we
-          // want anyway. Pinned to the version in package.json.
-          const cdn =
-            'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
-          const { removeBackground } = await import(/* webpackIgnore: true */ cdn);
-          const blob = await removeBackground(src);
-          const bmp = await createImageBitmap(blob);
-          return bmp as CanvasImageSource;
+          // Instant load: assume the src is already a transparent PNG or acceptable image
+          const img = await loadRaw(src);
+          // Convert to bitmap for faster canvas rendering
+          return await createImageBitmap(img);
         } catch {
-          try {
-            return await loadRaw(src);
-          } catch {
-            return null;
-          }
+          return null;
         }
       })()
     );

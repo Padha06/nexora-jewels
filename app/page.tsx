@@ -9,7 +9,7 @@ import RateTicker from '@/components/RateTicker';
 import HomeShop from '@/components/HomeShop';
 import StoreSections from '@/components/StoreSections';
 import Faq from '@/components/Faq';
-import ModelViewer from '@/components/ModelViewer';
+import Hero3D from '@/components/Hero3D';
 import DemoGallery from '@/components/DemoGallery';
 import { TextReveal } from '@/components/TextReveal';
 
@@ -113,11 +113,8 @@ export default async function Home() {
           
           <div className="relative h-[500px] lg:h-[700px] flex items-center justify-center">
             {/* Signature 3D Piece floats here cleanly */}
-            <div className="absolute inset-0 scale-110">
-              <ModelViewer 
-                src="https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb" 
-                alt="Signature Piece" 
-              />
+            <div className="absolute inset-0">
+              <Hero3D />
             </div>
           </div>
         </div>

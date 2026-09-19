@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, Suspense } from 'react';
+import { useState, useRef, Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
+import * as THREE from 'three';
 
 const SKIN_TONES = {
   Fair: '#f1c27d',
@@ -10,28 +11,29 @@ const SKIN_TONES = {
   Dusky: '#8d5524',
 };
 
-// Procedural Mannequin (Abstract Bust)
+// GLB Mannequin loaded from client's file
 function Mannequin({ skinTone }: { skinTone: string }) {
-  return (
-    <group position={[0, -1.2, 0]}>
-      {/* Head */}
-      <mesh position={[0, 2.3, 0]}>
-        <sphereGeometry args={[0.85, 64, 64]} />
-        <meshStandardMaterial color={skinTone} roughness={0.4} />
-      </mesh>
-      {/* Neck */}
-      <mesh position={[0, 1.2, 0]}>
-        <cylinderGeometry args={[0.38, 0.45, 1.2, 64]} />
-        <meshStandardMaterial color={skinTone} roughness={0.4} />
-      </mesh>
-      {/* Shoulders / Bust */}
-      <mesh position={[0, 0.3, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <capsuleGeometry args={[0.7, 1.6, 64, 64]} />
-        <meshStandardMaterial color={skinTone} roughness={0.4} />
-      </mesh>
-    </group>
-  );
+  const { scene } = useGLTF('/bust.glb');
+  
+  useEffect(() => {
+    // Apply the selected skin tone to all meshes in the loaded bust
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = new THREE.MeshStandardMaterial({ 
+          color: skinTone, 
+          roughness: 0.4,
+          metalness: 0.1
+        });
+      }
+    });
+  }, [scene, skinTone]);
+
+  // We use the <Center> component in the parent to auto-scale and center this arbitrary GLB
+  return <primitive object={scene} />;
 }
+// Preload for instant switching
+useGLTF.preload('/bust.glb');
 
 // Procedural Placeholder Necklace
 function GoldNecklace() {
@@ -89,19 +91,29 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
         <Canvas 
           ref={canvasRef}
           gl={{ preserveDrawingBuffer: true, antialias: true }} 
-          camera={{ position: [0, 0, 3.5], fov: 45 }}
+          camera={{ position: [0, 0, 4], fov: 45 }}
         >
           <Suspense fallback={null}>
             <Environment preset="city" />
             <ambientLight intensity={0.4} />
             <spotLight position={[5, 10, 5]} intensity={1} penumbra={1} angle={0.5} />
             
-            <Mannequin skinTone={SKIN_TONES[skin]} />
-            <GoldNecklace />
+            <Bounds fit clip observe margin={1.2}>
+              <Center position={[0, 0, 0]}>
+                <Mannequin skinTone={SKIN_TONES[skin]} />
+                {/* The procedural necklace floats near the neck area.
+                    Depending on the exact shape of their bust.glb, this might need slight XYZ tweaks 
+                    which we can do once we see it, or we wait for their real necklace GLB */}
+                <group position={[0, 1.2, 0]} scale={1}>
+                  <GoldNecklace />
+                </group>
+              </Center>
+            </Bounds>
             
             <ContactShadows position={[0, -2.5, 0]} opacity={0.5} scale={10} blur={2} far={4} />
             
             <OrbitControls 
+              makeDefault
               enablePan={false} 
               minDistance={1.5} 
               maxDistance={5}
