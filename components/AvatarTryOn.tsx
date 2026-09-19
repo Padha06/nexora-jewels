@@ -50,7 +50,7 @@ function GoldNecklace() {
       {/* Diamond in the center */}
       <mesh position={[0, -0.35, 0.55]}>
         <sphereGeometry args={[0.05, 32, 32]} />
-        <meshStandardMaterial color="#FFFFFF" metalness={0.1} roughness={0} transmission={1} ior={2.4} thickness={0.5} envMapIntensity={3} />
+        <meshPhysicalMaterial color="#FFFFFF" metalness={0.1} roughness={0} transmission={1} ior={2.4} thickness={0.5} envMapIntensity={3} />
       </mesh>
     </group>
   );
