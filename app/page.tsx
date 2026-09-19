@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import TextReveal from '@/components/TextReveal';
+import { TextReveal } from '@/components/TextReveal';
 import HomeShop from '@/components/HomeShop';
 import StoreSections from '@/components/StoreSections';
 import Faq from '@/components/Faq';

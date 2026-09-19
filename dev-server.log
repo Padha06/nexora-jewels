@@ -62,3 +62,16 @@ Caused by:
 Import trace for requested module:
 ./components/Hero3D.tsx
 ./components/ProductDetails.tsx
+ ⨯ ./components/ProductDetails.tsx:11:30
+Module not found: Can't resolve './Hero3D'
+[0m [90m  9 |[39m [36mimport[39m [33mCartDrawer[39m [36mfrom[39m [32m'./CartDrawer'[39m[33m;[39m[0m
+[0m [90m 10 |[39m[0m
+[0m[31m[1m>[22m[39m[90m 11 |[39m [36mconst[39m [33mHero3D[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'./Hero3D'[39m)[33m,[39m {[0m
+[0m [90m    |[39m                              [31m[1m^[22m[39m[0m
+[0m [90m 12 |[39m   ssr[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m [90m 13 |[39m   loading[33m:[39m () [33m=>[39m [33m<[39m[33mdiv[39m className[33m=[39m[32m"flex h-[420px] items-center justify-center bg-cream text-[12px] uppercase tracking-[0.25em] text-charcoal/50"[39m[33m>[39m[33mPreparing[39m [35m360[39m°…[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+[0m [90m 14 |[39m })[33m;[39m[0m
+
+https://nextjs.org/docs/messages/module-not-found
+ ✓ Compiled in 4.4s (857 modules)
+ ✓ Compiled in 1361ms (857 modules)
