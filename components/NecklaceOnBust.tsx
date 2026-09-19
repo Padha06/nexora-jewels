@@ -4,14 +4,20 @@ import { useMemo, useEffect } from 'react';
 import { useGLTF, Center } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Tunables (only touch if a new bust/necklace pair looks off)
-const NECKLACE_WIDTH_RATIO = 0.62; // necklace width as a fraction of bust width
-const NECK_DROP_RATIO = 0.3; // how far below the bust top the necklace sits (× bust height)
-const NECK_FORWARD_RATIO = 0.3; // how far in front of bust centre (× bust depth)
-const NECK_TILT = -0.12; // lean back onto the chest slope
+// Measured from the actual files (see repo notes):
+// - bust.glb: upright display bust, neck opening faces straight up at
+//   ≈ (−5.3, 15, 36), chest front ≈ z 30–35, plus an invisible-from-front
+//   backdrop slab at z 45–55. Front faces +z.
+// - necklace scene.gltf: loop lying FLAT in XZ (≈11.6 × 12.2), pendant stones
+//   on the +z edge, chain thickness ≈6 in y.
+const NECK_X = -5; // under the neck opening
+const LOOP_TOP_Y = 13; // loop top tucks just under the neck
+const PLANE_Z = 36.5; // resting on the chest front, clear of the surface
+const TARGET_WIDTH = 16; // necklace width vs ~21-wide shoulders
+const LEAN = 0.12; // top tips back toward the neck, bottom kicks onto chest
 
-// Necklace seated on the bust from MEASURED bounding boxes — no magic numbers,
-// so it stays correct even if the client swaps either GLB file.
+// Necklace seated on the bust from MEASURED bounding boxes — placement is
+// derived from the real geometry, so it survives either GLB being swapped.
 export default function NecklaceOnBust({ finish }: { finish: 'marble' | string }) {
   const { scene: bust } = useGLTF('/bust.glb');
   const { scene: necklace } = useGLTF('/necklace_models/scene.gltf');
@@ -31,22 +37,23 @@ export default function NecklaceOnBust({ finish }: { finish: 'marble' | string }
     return () => { mat.dispose(); };
   }, [bust, finish]);
 
-  // Measure in LOCAL space; <Center> re-frames both models to the same origin,
-  // so local sizes map 1:1 onto the centered world.
   const placement = useMemo(() => {
     const bustBox = new THREE.Box3().setFromObject(bust);
     const neckBox = new THREE.Box3().setFromObject(necklace);
     const bustSize = bustBox.getSize(new THREE.Vector3());
+    const bustCenter = bustBox.getCenter(new THREE.Vector3());
     const neckSize = neckBox.getSize(new THREE.Vector3());
     if (bustSize.x <= 0 || neckSize.x <= 0) return null;
-    return {
-      scale: (bustSize.x * NECKLACE_WIDTH_RATIO) / neckSize.x,
-      position: new THREE.Vector3(
-        0,
-        bustSize.y * 0.5 - bustSize.y * NECK_DROP_RATIO,
-        bustSize.z * NECK_FORWARD_RATIO
-      )
-    };
+    // Stand the flat loop upright: +90° about X sends the +z pendant edge
+    // to the bottom; LEAN tips the top back onto the neck slope.
+    const scale = (TARGET_WIDTH / neckSize.x) * 1.0;
+    const standingH = neckSize.z * scale;
+    const world = new THREE.Vector3(
+      NECK_X,
+      LOOP_TOP_Y - standingH / 2 + 0.5,
+      PLANE_Z
+    );
+    return { scale, position: world.sub(bustCenter).toArray() as [number, number, number] };
   }, [bust, necklace]);
 
   return (
@@ -55,8 +62,8 @@ export default function NecklaceOnBust({ finish }: { finish: 'marble' | string }
         <primitive object={bust} />
       </Center>
       {placement && (
-        <Center position={placement.position.toArray() as [number, number, number]}>
-          <group rotation={[NECK_TILT, 0, 0]} scale={placement.scale}>
+        <Center position={placement.position}>
+          <group rotation={[Math.PI / 2 - LEAN, 0, 0]} scale={placement.scale}>
             <primitive object={necklace} />
           </group>
         </Center>

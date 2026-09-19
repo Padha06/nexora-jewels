@@ -30,6 +30,11 @@ export default function Hero3D() {
           enablePan={false}
           minDistance={1.5}
           maxDistance={7}
+          // Front hemisphere only — the bust's display backdrop lives behind it
+          minAzimuthAngle={-1.1}
+          maxAzimuthAngle={1.1}
+          minPolarAngle={Math.PI / 5}
+          maxPolarAngle={Math.PI / 2 + 0.15}
           autoRotate={
             typeof window !== 'undefined' &&
             !window.matchMedia('(prefers-reduced-motion: reduce)').matches

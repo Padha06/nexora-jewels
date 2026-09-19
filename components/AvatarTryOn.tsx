@@ -67,6 +67,8 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
               maxDistance={5}
               minPolarAngle={Math.PI / 4} 
               maxPolarAngle={Math.PI / 2 + 0.1}
+              minAzimuthAngle={-1.1}
+              maxAzimuthAngle={1.1}
               autoRotate
               autoRotateSpeed={1.0}
             />
