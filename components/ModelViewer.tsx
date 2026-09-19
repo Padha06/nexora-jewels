@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Using a generic rings/jewelry GLB URL from Google's model-viewer examples if available, 
 // or providing a fallback that the user can replace with their own.
@@ -22,38 +22,82 @@ export default function ModelViewer({
     import('@google/model-viewer');
   }, []);
 
-  const handleARClick = () => {
+  const [showWebAR, setShowWebAR] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleARClick = async () => {
     try {
       const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
       const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const isAndroid = /android/i.test(ua);
-
+      
+      // On iOS, Native AR Quick Look is extremely reliable and doesn't have the ARCore fragmentation issue.
       if (isIOS && iosSrc) {
-        // Direct Apple AR Quick Look launch
         const anchor = document.createElement('a');
         anchor.setAttribute('rel', 'ar');
         anchor.setAttribute('href', iosSrc);
-        anchor.appendChild(document.createElement('img')); // Required by older iOS
+        anchor.appendChild(document.createElement('img'));
         anchor.click();
-      } else if (isAndroid) {
-        // Direct Google Scene Viewer launch
-        const intentUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(src)}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;`;
-        window.location.href = intentUrl;
-      } else {
-        // Fallback for other systems
-        if (viewerRef.current) {
-          viewerRef.current.activateAR();
-        }
+        return;
+      }
+
+      // For Android and other devices (especially Betas like Android 16 without ARCore), 
+      // we use an instant, ultra-compatible Web Camera Overlay!
+      setShowWebAR(true);
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
       }
     } catch (err) {
-      console.error("AR Launch failed", err);
-      // Failsafe
-      if (viewerRef.current) viewerRef.current.activateAR();
+      console.error("Camera launch failed", err);
+      alert("Please allow camera permissions to try this piece on.");
+      setShowWebAR(false);
+    }
+  };
+
+  const closeWebAR = () => {
+    setShowWebAR(false);
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
     }
   };
 
   return (
     <div className="flex flex-col w-full">
+      {/* Universal Web AR Overlay */}
+      {showWebAR && (
+        <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden touch-none">
+          <video 
+            ref={videoRef} 
+            playsInline 
+            className="absolute inset-0 w-full h-full object-cover" 
+          />
+          
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[101]">
+            <img 
+              src={fallbackImage} 
+              alt={alt} 
+              className="w-2/3 max-w-[250px] drop-shadow-2xl opacity-90 mix-blend-multiply" 
+              style={{ filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.5))' }}
+            />
+          </div>
+
+          <div className="absolute top-10 w-full px-6 flex justify-between items-start z-[102]">
+            <p className="bg-black/50 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md">
+              Line up your hand or face with the piece
+            </p>
+            <button 
+              onClick={closeWebAR}
+              className="bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="relative w-full overflow-hidden rounded-2xl bg-zinc-50 border border-zinc-200 shadow-inner group flex items-center justify-center min-h-[400px]">
         <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-0 transition duration-500 pointer-events-none">
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
@@ -75,7 +119,6 @@ export default function ModelViewer({
           <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}>
              {/* Fallback image shown while model loads */}
           </div>
-          {/* Hide the default internal AR button to avoid confusion */}
           <div slot="ar-button" className="hidden"></div>
         {/* @ts-ignore */}
         </model-viewer>
