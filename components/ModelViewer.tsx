@@ -2,9 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import MediaPipeAR from './MediaPipeAR';
+import AvatarTryOn from './AvatarTryOn';
 
-// Using a generic rings/jewelry GLB URL from Google's model-viewer examples if available, 
-// or providing a fallback that the user can replace with their own.
 export default function ModelViewer({
   src = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
   iosSrc = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.usdz',
@@ -25,8 +24,9 @@ export default function ModelViewer({
   }, []);
 
   const [showAI, setShowAI] = useState(false);
+  const [showAvatar, setShowAvatar] = useState(false);
 
-  const handleARClick = async () => {
+  const handleLiveARClick = async () => {
     try {
       const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
       const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -40,7 +40,6 @@ export default function ModelViewer({
         return;
       }
 
-      // Launch full AI Tracker
       setShowAI(true);
     } catch (err) {
       console.error(err);
@@ -49,6 +48,11 @@ export default function ModelViewer({
 
   return (
     <div className="flex flex-col w-full">
+      {/* 3D Avatar Try-On */}
+      {showAvatar && (
+        <AvatarTryOn onClose={() => setShowAvatar(false)} />
+      )}
+
       {/* Universal Web AR Overlay using MediaPipe */}
       {showAI && (
         <MediaPipeAR 
@@ -63,7 +67,7 @@ export default function ModelViewer({
            <p className="font-serif text-3xl font-bold tracking-widest text-zinc-400 uppercase">360° View</p>
         </div>
         
-        {/* @ts-ignore - model-viewer is a custom element */}
+        {/* @ts-ignore */}
         <model-viewer
           ref={viewerRef}
           src={src}
@@ -76,9 +80,7 @@ export default function ModelViewer({
           shadow-intensity="1"
           style={{ width: '100%', height: '400px', backgroundColor: 'transparent' }}
         >
-          <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}>
-             {/* Fallback image shown while model loads */}
-          </div>
+          <div slot="poster" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${fallbackImage})` }}></div>
           <div slot="ar-button" className="hidden"></div>
         {/* @ts-ignore */}
         </model-viewer>
@@ -88,13 +90,20 @@ export default function ModelViewer({
         </p>
       </div>
 
-      <button 
-        onClick={handleARClick}
-        className="mt-6 w-full bg-charcoal text-ivory py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-deepgold transition-colors shadow-md flex items-center justify-center gap-3 lg:hidden"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M10 14.5v-5L14.5 12z"/></svg>
-        Try on in your space
-      </button>
+      <div className="mt-6 flex flex-col gap-3 lg:hidden">
+        <button 
+          onClick={() => setShowAvatar(true)}
+          className="w-full bg-charcoal text-ivory py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-deepgold transition-colors shadow-md flex items-center justify-center gap-3"
+        >
+          👤 Virtual 3D Try-On
+        </button>
+        <button 
+          onClick={handleLiveARClick}
+          className="w-full bg-white text-charcoal py-4 rounded-xl uppercase tracking-widest text-[13px] font-bold hover:bg-zinc-50 border border-charcoal/20 transition-colors shadow-sm flex items-center justify-center gap-3"
+        >
+          📸 Live Camera AR
+        </button>
+      </div>
     </div>
   );
 }
