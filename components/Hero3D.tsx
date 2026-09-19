@@ -60,11 +60,11 @@ export default function Hero3D() {
         <directionalLight position={[4, 6, 5]} intensity={1.5} />
         <pointLight position={[-5, 2, -3]} intensity={40} color="#c6a15b" />
         
-        <Bounds fit clip observe margin={1.2}>
+        <Bounds fit clip observe margin={0.9}>
           <Center position={[0, 0, 0]}>
             <Mannequin />
-            {/* Adjusted position/scale specifically for the uploaded bust.glb */}
-            <group position={[0, 0.28, 0.03]} rotation={[-0.15, 0, 0]} scale={0.18}>
+            {/* User-provided transform values for the real necklace */}
+            <group position={[0, 0.42, 0.08]} rotation={[-0.15, 0, 0]} scale={0.9}>
               <RealNecklace />
             </group>
           </Center>
@@ -75,7 +75,7 @@ export default function Hero3D() {
           makeDefault
           enableDamping
           enablePan={false}
-          minDistance={3}
+          minDistance={1.5}
           maxDistance={7}
           autoRotate={
             typeof window !== 'undefined' &&

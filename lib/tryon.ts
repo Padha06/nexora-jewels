@@ -57,12 +57,17 @@ export function getProductCutout(src: string): Promise<CanvasImageSource | null>
       src,
       (async () => {
         try {
-          // Instant load: assume the src is already a transparent PNG or acceptable image
-          const img = await loadRaw(src);
-          // Convert to bitmap for faster canvas rendering
-          return await createImageBitmap(img);
+          const cdn = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
+          const { removeBackground } = await import(/* webpackIgnore: true */ cdn);
+          const blob = await removeBackground(src);
+          return await createImageBitmap(blob);
         } catch {
-          return null;
+          try {
+            const img = await loadRaw(src);
+            return await createImageBitmap(img);
+          } catch {
+            return null;
+          }
         }
       })()
     );

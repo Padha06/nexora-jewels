@@ -91,11 +91,11 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
             <ambientLight intensity={0.4} />
             <spotLight position={[5, 10, 5]} intensity={1} penumbra={1} angle={0.5} />
             
-        <Bounds fit clip observe margin={1.2}>
+        <Bounds fit clip observe margin={0.9}>
           <Center position={[0, 0, 0]}>
             <Mannequin skinTone={SKIN_TONES[skin]} />
-            {/* Adjusted position/scale specifically for the uploaded bust.glb */}
-            <group position={[0, 0.28, 0.03]} rotation={[-0.15, 0, 0]} scale={0.18}>
+            {/* User-provided transform values for the real necklace */}
+            <group position={[0, 0.42, 0.08]} rotation={[-0.15, 0, 0]} scale={0.9}>
               <RealNecklace />
             </group>
           </Center>
@@ -106,7 +106,7 @@ export default function AvatarTryOn({ onClose }: { onClose: () => void }) {
             <OrbitControls 
               makeDefault
               enablePan={false} 
-              minDistance={1.5} 
+              minDistance={1.0} 
               maxDistance={5}
               minPolarAngle={Math.PI / 4} 
               maxPolarAngle={Math.PI / 2 + 0.1}
