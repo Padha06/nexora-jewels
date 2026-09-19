@@ -16,6 +16,8 @@ export interface Product {
   priceInr: number | null; // null = live-rate price via calculator
   images: string[];
   description: string;
+  story: string; // craft narrative for the PDP (Qween-style storytelling)
+  styling: string; // styling tip
   flagship?: boolean;
 }
 
@@ -41,6 +43,9 @@ export const products: Product[] = [
     ],
     description:
       'High-domed 22K shank, six-claw setting. BIS certificate + stone report, insured delivery, lifetime exchange in writing.',
+    story:
+      'Cut for candlelight, not camera flashes. The high dome catches the room before you enter it — six claws, nothing shouting, everything gleaming.',
+    styling: 'Wear it alone on the right hand by day; stack a plain band beside it after dark.',
     flagship: true
   },
   {
@@ -58,7 +63,10 @@ export const products: Product[] = [
     images: [
       '/temple-necklace.jpg'
     ],
-    description: 'Antique-finish temple necklace with ruby, emerald and pearl detailing. Photographed at our Nagpur boutique.'
+    description: 'Antique-finish temple necklace with ruby, emerald and pearl detailing. Photographed at our Nagpur boutique.',
+    story:
+      'Temple gold, the way grandmothers remember it — deep antique finish, ruby and emerald kundan, pearl drops that move when you do. Made to be worn at weddings, not locked away after them.',
+    styling: 'Let it sit alone on bare collarbones with silk; nothing else on the neck.'
   },
   {
     slug: 'chandbali-earrings',
@@ -76,7 +84,10 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=1000&q=80&auto=format&fit=crop'
     ],
-    description: 'Classic chandbalis with pearl drops. Placeholder photo until client shoot.'
+    description: 'Classic chandbalis with pearl drops. Placeholder photo until client shoot.',
+    story:
+      'The moon, miniaturised. Chandbalis frame the face the way good lighting frames a room — softly, from every side.',
+    styling: 'Hair up, always — chandbalis need an audience.'
   },
   {
     slug: 'heritage-kada-bangle',
@@ -94,7 +105,10 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1000&q=80&auto=format&fit=crop'
     ],
-    description: 'Heavy hand-hammered kada, annealed seven times. Placeholder photo until client shoot.'
+    description: 'Heavy hand-hammered kada, annealed seven times. Placeholder photo until client shoot.',
+    story:
+      'One kada, worn daily for decades — that is the entire design brief. Annealed seven times, hammered by hand, heavy enough to feel like a decision.',
+    styling: 'Solo on one wrist; let the other wrist stay bare.'
   }
 ];
 

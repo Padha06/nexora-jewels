@@ -6,6 +6,6 @@
   - Local:        http://localhost:3001
 
  ✓ Starting...
- ✓ Ready in 3.3s
- ○ Compiling / ...
- ✓ Compiled / in 14.6s (1470 modules)
+ ✓ Ready in 3.1s
+ ○ Compiling /product/[slug] ...
+ ✓ Compiled /product/[slug] in 8.2s (1246 modules)

@@ -14,14 +14,14 @@ function hash3(x: number, y: number, z: number): number {
   return s - Math.floor(s);
 }
 
-function ShowcasePiece() {
+function ShowcasePiece({ metalColor = '#b98a2e' }: { metalColor?: string }) {
   const { scene } = useGLTF('/showcase.glb');
   const spin = useRef<THREE.Group>(null);
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
     const gold = new THREE.MeshPhysicalMaterial({
-      color: '#b98a2e', // deep antique temple gold
+      color: metalColor, // live tint: antique yellow / rose / white gold
       metalness: 1,
       roughness: 0.38,
       clearcoat: 0.45,
@@ -58,7 +58,7 @@ function ShowcasePiece() {
       }
     });
     return clone;
-  }, [scene]);
+  }, [scene, metalColor]);
 
   useFrame((state, delta) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -93,7 +93,7 @@ function Pedestal() {
 
 // Signature 3D showcase in a jharokha-arch frame — no photography, pure theme:
 // ivory gradient, gold hairlines, the piece on ivory marble.
-export default function Hero3D() {
+export default function Hero3D({ metalColor = '#b98a2e' }: { metalColor?: string }) {
   return (
     <div className="relative mx-auto h-[520px] w-full max-w-md lg:h-[640px]">
       {/* arch frame */}
@@ -131,7 +131,7 @@ export default function Hero3D() {
         <pointLight position={[-4, 1.5, 4]} intensity={7} color="#c22744" distance={12} />
         <pointLight position={[4, 1.5, 4]} intensity={7} color="#1f9d63" distance={12} />
 
-        <ShowcasePiece />
+        <ShowcasePiece metalColor={metalColor} />
         <Pedestal />
         <Sparkles count={30} scale={[7, 4, 4]} size={3} speed={0.35} color="#e9c877" opacity={0.5} />
         <ContactShadows position={[0, -0.02, 0]} opacity={0.4} scale={16} blur={2.4} far={5} />
